@@ -17,11 +17,10 @@ type Quote = { q: string; a: string };
 
 async function fetchRandomQuote(): Promise<Quote> {
   try {
-    const res = await fetch("https://zenquotes.io/api/random", { cache: "no-store" });
-    if (!res.ok) throw new Error("API error");
-    const data = await res.json();
-    if (Array.isArray(data) && data[0]?.q) {
-      return { q: data[0].q, a: data[0].a || "Unknown" };
+    const res = await fetch("/api/quote", { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.q) return { q: data.q, a: data.a || "Unknown" };
     }
   } catch {
     // fallback to local quotes
