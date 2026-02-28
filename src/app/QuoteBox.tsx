@@ -29,7 +29,9 @@ async function fetchRandomQuote(): Promise<Quote> {
   return FALLBACK_QUOTES[i];
 }
 
-export default function QuoteBox() {
+type QuoteBoxProps = { onQuoteLoaded?: () => void };
+
+export default function QuoteBox({ onQuoteLoaded }: QuoteBoxProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadedOnce, setLoadedOnce] = useState(false);
@@ -40,11 +42,12 @@ export default function QuoteBox() {
     setQuote(q);
     setLoadedOnce(true);
     setLoading(false);
-  }, []);
+    onQuoteLoaded?.();
+  }, [onQuoteLoaded]);
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/50 p-8 sm:p-10 shadow-sm min-h-[200px] flex flex-col justify-center">
+      <div className="rounded-2xl border border-white/30 dark:border-zinc-500/40 bg-white/15 dark:bg-black/25 backdrop-blur-md p-8 sm:p-10 shadow-lg min-h-[200px] flex flex-col justify-center">
         {!loadedOnce && !loading && (
           <p className="text-zinc-500 dark:text-zinc-400 text-center text-sm">
             Click the button below to load a motivational quote.
